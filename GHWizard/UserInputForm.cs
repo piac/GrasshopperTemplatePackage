@@ -33,12 +33,14 @@ namespace GHWizard
         string path, exeName;
         
         bool ok32 = RhinoFinder.FindRhino5_32bit(out path, out exeName);
-        rhino32path.Text = Path.Combine(path, exeName);
+        if(ok32)
+          rhino32path.Text = Path.Combine(path, exeName);
         rhino32.Checked = ok32;
-
         string path32 = path;
+        
         bool ok64 = RhinoFinder.FindRhino5_64bit(out path, out exeName);
-        rhino64path.Text = Path.Combine(path, exeName);
+        if(ok64)
+          rhino64path.Text = Path.Combine(path, exeName);
         rhino64.Checked = ok64;
 
         bool ghOk = GrasshopperFinder.FindGrasshopper(out path, out exeName);
@@ -50,9 +52,9 @@ namespace GHWizard
           rhinocommonPath.ForeColor = Color.Red;
         }
 
-        if (File.Exists(Path.Combine(path, "rhinocommon.dll")))
+        if (!string.IsNullOrEmpty(path) && File.Exists(Path.Combine(path, "rhinocommon.dll")))
           rhinocommonPath.Text = Path.Combine(path, "rhinocommon.dll");
-        else if (File.Exists(Path.Combine(path32, "rhinocommon.dll")))
+        else if (!string.IsNullOrEmpty(path32) && File.Exists(Path.Combine(path32, "rhinocommon.dll")))
           rhinocommonPath.Text = Path.Combine(path32, "rhinocommon.dll");
         else
         {
